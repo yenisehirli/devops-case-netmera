@@ -3,11 +3,3 @@ name: go-kafka-app
 description: A Helm chart for Go Kafka DevOps case study
 version: 0.1.0
 appVersion: "1.0.0"
-
-dependencies:
-- name: kafka
-  version: "26.8.5"
-  repository: "https://charts.bitnami.com/bitnami"
-- name: mongodb
-  version: "15.6.2" 
-  repository: "https://charts.bitnami.com/bitnami"
