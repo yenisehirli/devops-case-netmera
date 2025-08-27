@@ -22,9 +22,9 @@ ingress:
 
 # Environment variables
 env:
-  KAFKA_BROKERS: "kafka:9092"
+  KAFKA_BROKERS: "go-kafka-app-kafka:9092"
   KAFKA_TOPIC: "messages"
-  MONGODB_URI: "mongodb://mongodb:27017"
+  MONGODB_URI: "mongodb://go-kafka-app-mongodb:27017"
   MONGODB_DATABASE: "devops_case"
 
 # Resource limits

@@ -1,0 +1,9 @@
+dependencies:
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 26.8.5
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.6.2
+digest: sha256:18d9b1718b3f7afbdb4f05b4732d55903e6a06d6300f13907a5c0cfc14d9ae30
+generated: "2025-08-27T14:32:13.995064795Z"
