@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: go-kafka-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/yenisehirli/devops-case-netmera.git
+    targetRevision: main
+    path: chart/go-kafka-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

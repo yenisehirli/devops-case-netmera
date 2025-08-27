@@ -1,0 +1,61 @@
+# Application configuration
+app:
+  name: go-kafka-app
+  replicas: 2
+  image:
+    repository: yenisehirli/go-kafka-app
+    tag: latest
+    pullPolicy: Always
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  host: go-kafka-app.local
+  path: /
+
+# Environment variables
+env:
+  KAFKA_BROKERS: "kafka:9092"
+  KAFKA_TOPIC: "messages"
+  MONGODB_URI: "mongodb://mongodb:27017"
+  MONGODB_DATABASE: "devops_case"
+
+# Resource limits
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Kafka configuration
+kafka:
+  enabled: true
+  image:
+    tag: 3.4.1-debian-11-r0
+  listeners:
+    client:
+      protocol: PLAINTEXT
+  persistence:
+    enabled: false
+  zookeeper:
+    persistence:
+      enabled: false
+
+# MongoDB configuration  
+mongodb:
+  enabled: true
+  image:
+    tag: 6.0.5-debian-11-r0
+  auth:
+    enabled: false
+  persistence:
+    enabled: false

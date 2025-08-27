@@ -1,0 +1,5 @@
+apiVersion: v2
+name: go-kafka-app
+description: A Helm chart for Go Kafka DevOps case study
+version: 0.1.0
+appVersion: "1.0.0"
