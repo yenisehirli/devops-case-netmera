@@ -22,7 +22,7 @@ ingress:
 
 # Environment variables
 env:
-  KAFKA_BROKERS: "kafka.default.svc.cluster.local:9092"
+  KAFKA_BROKERS: "go-kafka-app:9092"
   KAFKA_TOPIC: "messages"
   MONGODB_URI: "mongodb://root:password@mongodb:27017"
   MONGODB_DATABASE: "devops_case"
@@ -36,9 +36,30 @@ resources:
     cpu: 250m
     memory: 256Mi
 
-# Kafka configuration - DISABLE since we use external KRaft Kafka
+# Kafka configuration
 kafka:
-  enabled: false
+  enabled: true
+  image:
+    tag: 3.4.1-debian-11-r0
+  listeners:
+    client:
+      protocol: PLAINTEXT
+  persistence:
+    enabled: false
+  extraEnvVars:
+    - name: ALLOW_PLAINTEXT_LISTENER
+      value: "yes"
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  zookeeper:
+    persistence:
+      enabled: false
 
 # MongoDB configuration  
 mongodb:
