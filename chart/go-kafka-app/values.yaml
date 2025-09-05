@@ -49,6 +49,14 @@ kafka:
   extraEnvVars:
     - name: ALLOW_PLAINTEXT_LISTENER
       value: "yes"
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   zookeeper:
     persistence:
       enabled: false
