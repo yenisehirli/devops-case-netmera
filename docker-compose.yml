@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+  # KRaft-based Kafka
+  kafka:
+    image: bitnami/kafka:4.0.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      # KRaft mode configuration
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_BROKER_ID: 1
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_CFG_NUM_PARTITIONS: 1
+      KAFKA_CFG_DEFAULT_REPLICATION_FACTOR: 1
+      ALLOW_PLAINTEXT_LISTENER: yes
+    volumes:
+      - kafka_data:/bitnami/kafka
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  # MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb # if you don't use container_name , your container called as {project-name}_{service-name}_{index}, i.e go-kafka-app_mongodb_1
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  # Go Application
+  # Lines 45-64 were commented out to take the go-kafka-app application out of the container
+  # go-kafka-app:
+  #   build: .
+  #   container_name: go-kafka-app
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     KAFKA_BROKERS: kafka:9092
+  #     KAFKA_TOPIC: messages
+  #     MONGODB_URI: mongodb://root:password@mongodb:27017
+  #     MONGODB_DATABASE: devops_case
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #     mongodb:
+  #       condition: service_healthy
+  #   restart: unless-stopped
+volumes:
+  kafka_data:
+    driver: local
+  mongodb_data:
+    driver: local
