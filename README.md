@@ -4,6 +4,22 @@ A complete DevOps pipeline implementation for a Go-based microservice that proce
 
 ## Architecture
 
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   GitHub Repo   │───▶│  GitHub Actions │───▶│  Docker Registry│
+│                 │    │   (CI/CD)       │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                                        │
+┌─────────────────┐    ┌─────────────────┐             │
+│     ArgoCD      │───▶│   Kubernetes    │◄────────────┘
+│   (GitOps)      │    │    Cluster      │
+└─────────────────┘    └─────────────────┘
+                              │
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Prometheus    │───▶│   Go App Pods   │───▶│    MongoDB      │
+│   + Grafana     │    │     + Kafka     │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+
+
 ### Application Stack
 
 - **Go Web Service**: REST API with health endpoints
